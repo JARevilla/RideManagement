@@ -5,6 +5,7 @@ from django.utils.timezone import now, timedelta
 from django.db.models import Prefetch, F, FloatField
 from django_filters.rest_framework import DjangoFilterBackend # type: ignore
 from django.db.models.functions import Sqrt, Power
+from .apiaccesspermission import IsAPIAdminUser # type: ignore
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -21,6 +22,7 @@ class RideViewSet(viewsets.ModelViewSet):
         )
     ).select_related('id_rider', 'id_driver')
     serializer_class = RideSerializer
+    permission_classes = [IsAPIAdminUser]
 
     def get_queryset(self):
         queryset = super().get_queryset()
