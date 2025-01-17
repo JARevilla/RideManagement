@@ -1,4 +1,7 @@
 from django.db import models
+from datetime import timedelta
+from django.utils.timezone import now
+
 
 class User(models.Model):
     
@@ -43,8 +46,23 @@ class Ride(models.Model):
     dropoff_longitude = models.FloatField(null=False)
     pickup_time = models.DateTimeField(null=False)
 
+    class Meta:
+        indexes = [
+            models.Index(fields=['pickup_time']),
+            models.Index(fields=['pickup_latitude', 'pickup_longitude']),
+        ]
+
+    def get_todays_events(self):
+        """Retrieve RideEvents for this ride that occurred in the last 24 hours."""
+        return self.events.filter(created_at__gte=now() - timedelta(days=1))
+
 class RideEvent(models.Model):
     id_ride_event = models.AutoField(primary_key=True,null=False)
     id_ride = models.ForeignKey(Ride, related_name='events', on_delete=models.CASCADE,null=False)
     description = models.CharField(max_length=255,null=False)
     created_at = models.DateTimeField(auto_now_add=True,null=False)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['created_at']),
+        ]
