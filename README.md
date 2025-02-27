@@ -57,7 +57,7 @@ Ride Management is an API endpoints created using Django-based Rest API applicat
 - `DELETE /api/ride-events/{id}/` - Delete a ride event..
 
 
-# Bonus SQL Query for Reporting
+# SQL Query for Reporting
 
 ```sql
 WITH RideDurations AS (
